@@ -25,18 +25,18 @@ export const ORIGIN =
     ? `https://${DOMAIN}`
     : `http://${DOMAIN}:3000`;
 
-export const litNodeClient: LitNodeClient = new LitNodeClient({
-  alertWhenUnauthorized: false,
-  litNetwork: 'cayenne',
-  debug: true,
-});
+// export const litNodeClient: LitNodeClient = new LitNodeClient({
+//   alertWhenUnauthorized: false,
+//   litNetwork: 'cayenne',
+//   debug: true,
+// });
 
 export const litAuthClient: LitAuthClient = new LitAuthClient({
   litRelayConfig: {
-    relayUrl: 'https://relay-server-staging.herokuapp.com',
+    // relayUrl: 'https://relay-server-staging.herokuapp.com',
     relayApiKey: 'test-api-key',
   },
-  litNodeClient,
+  // litNodeClient,
 });
 
 /**
@@ -171,40 +171,55 @@ export async function authenticateWithStytch(
   const authMethod = await provider?.authenticate({ accessToken, userId });
   return authMethod;
 }
+// export async function getSessionSigs({
+//   pkpPublicKey,
+//   authMethod,
+//   sessionSigsParams,
+// }: {
+//   pkpPublicKey: string;
+//   authMethod: AuthMethod;
+//   sessionSigsParams: GetSessionSigsProps;
+// }): Promise<SessionSigs> {
+//   // const provider = getProviderByAuthMethod(authMethod);
+//   // if (provider) {
+//   //   const sessionSigs = await provider.getSessionSigs({
+//   //     pkpPublicKey,
+//   //     authMethod,
+//   //     sessionSigsParams,
+//   //   });
+//   //   return sessionSigs;
+//   // } else {
+//   //   throw new Error(
+//   //     `Provider not found for auth method type ${authMethod.authMethodType}`
+//   //   );
+//   // }
+//   await litNodeClient.connect();
+//   const authNeededCallback = async (params: AuthCallbackParams) => {
+//     const response = await litNodeClient.signSessionKey({
+//       statement: params.statement,
+//       authMethods: [authMethod],
+//       pkpPublicKey: pkpPublicKey,
+//       expiration: params.expiration,
+//       resources: params.resources,
+//       chainId: 1,
+//     });
+//     return response.authSig;
+//   };
 
-/**
- * Generate session sigs for given params
- */
-export async function getSessionSigs({
-  pkpPublicKey,
-  authMethod,
-  sessionSigsParams,
-}: {
-  pkpPublicKey: string;
-  authMethod: AuthMethod;
-  sessionSigsParams: GetSessionSigsProps;
-}): Promise<SessionSigs> {
-  const provider = getProviderByAuthMethod(authMethod);
-  if (provider) {
-    const sessionSigs = await provider.getSessionSigs({
-      pkpPublicKey,
-      authMethod,
-      sessionSigsParams,
-    });
-    return sessionSigs;
-  } else {
-    throw new Error(
-      `Provider not found for auth method type ${authMethod.authMethodType}`
-    );
-  }
-}
+//   const sessionSigs = await litNodeClient.getSessionSigs({
+//     ...sessionSigsParams,
+//     authNeededCallback,
+//   });
 
-export async function updateSessionSigs(
-  params: GetSessionSigsProps
-): Promise<SessionSigs> {
-  const sessionSigs = await litNodeClient.getSessionSigs(params);
-  return sessionSigs;
-}
+//   return sessionSigs;
+// }
+
+// export async function updateSessionSigs(
+//   params: GetSessionSigsProps
+// ): Promise<SessionSigs> {
+//   const sessionSigs = await litNodeClient.getSessionSigs(params);
+//   return sessionSigs;
+// }
 
 /**
  * Fetch PKPs associated with given auth method
@@ -255,7 +270,7 @@ export async function mintPKP(authMethod: AuthMethod): Promise<IRelayPKP> {
 /**
  * Get provider for given auth method
  */
-function getProviderByAuthMethod(authMethod: AuthMethod) {
+export function getProviderByAuthMethod(authMethod: AuthMethod) {
   switch (authMethod.authMethodType) {
     case AuthMethodType.GoogleJwt:
       return litAuthClient.getProvider(ProviderType.Google);
