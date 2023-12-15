@@ -19,11 +19,14 @@ import {
   AuthCallbackParams,
 } from '@lit-protocol/types';
 
-export const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN || 'localhost';
+export const DOMAIN =
+  process.env.NODE_ENV === 'production'
+    ? 'lit-pkp-auth-demo-wine'
+    : 'localhost:3000';
 export const ORIGIN =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? `https://${DOMAIN}`
-    : `http://${DOMAIN}:3000`;
+  process.env.NODE_ENV === 'production'
+    ? 'https://lit-pkp-auth-demo-wine.vercel.app'
+    : 'http://localhost:3000';
 
 // export const litNodeClient: LitNodeClient = new LitNodeClient({
 //   alertWhenUnauthorized: false,

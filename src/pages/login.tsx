@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import useAuthenticate from '../hooks/useAuthenticate';
 import useSession from '../hooks/useSession';
 import useAccounts from '../hooks/useAccounts';
-import { ORIGIN, signInWithDiscord, signInWithGoogle } from '../utils/lit';
+import {  ORIGIN, signInWithDiscord, signInWithGoogle } from '../utils/lit';
 import Dashboard from '../components/Dashboard';
 import Loading from '../components/Loading';
 import LoginMethods from '../components/LoginMethods';
@@ -11,7 +11,7 @@ import AccountSelection from '../components/AccountSelection';
 import CreateAccount from '../components/CreateAccount';
 
 export default function LoginView() {
-  const redirectUri = ORIGIN + '/login';
+
 
   const {
     authMethod,
@@ -20,7 +20,7 @@ export default function LoginView() {
     authWithStytch,
     loading: authLoading,
     error: authError,
-  } = useAuthenticate(redirectUri);
+  } = useAuthenticate(ORIGIN);
   const {
     fetchAccounts,
     setCurrentAccount,
@@ -40,11 +40,11 @@ export default function LoginView() {
   const error = authError || accountsError || sessionError;
 
   async function handleGoogleLogin() {
-    await signInWithGoogle(redirectUri);
+    await signInWithGoogle(ORIGIN);
   }
 
   async function handleDiscordLogin() {
-    await signInWithDiscord(redirectUri);
+    await signInWithDiscord(ORIGIN);
   }
 
   function goToSignUp() {
@@ -57,7 +57,8 @@ export default function LoginView() {
       router.replace(window.location.pathname, undefined, { shallow: true });
       fetchAccounts(authMethod);
     }
-  }, [authMethod, fetchAccounts]);
+
+  }, [authMethod, fetchAccounts, router]);
 
   useEffect(() => {
     // If user is authenticated and has selected an account, initialize session
