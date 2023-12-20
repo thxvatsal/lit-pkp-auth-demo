@@ -20,7 +20,7 @@ export default function LoginView() {
     authWithStytch,
     loading: authLoading,
     error: authError,
-  } = useAuthenticate(ORIGIN);
+  } = useAuthenticate(ORIGIN+  '/login');
   const {
     fetchAccounts,
     setCurrentAccount,
@@ -40,11 +40,11 @@ export default function LoginView() {
   const error = authError || accountsError || sessionError;
 
   async function handleGoogleLogin() {
-    await signInWithGoogle(ORIGIN);
+    await signInWithGoogle(ORIGIN+ '/login');
   }
 
   async function handleDiscordLogin() {
-    await signInWithDiscord(ORIGIN);
+    await signInWithDiscord(ORIGIN+ '/login');
   }
 
   function goToSignUp() {
